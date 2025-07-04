@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { OllamaService } from '../ollama/ollama.service';
 
-interface DocumentChunk {
+type DocumentChunk = {
   id: string;
   content: string;
   metadata: any;
   embedding?: number[];
-}
+};
 
 @Injectable()
 export class RagService {
