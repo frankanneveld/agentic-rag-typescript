@@ -56,7 +56,7 @@ export class RagService {
 
   async retrieveRelevantContext(
     query: string,
-    topK: number = 3,
+    topK: number = 3, // If topK = 3, the model only considers the 3 most likely next tokens
   ): Promise<string[]> {
     if (this.documents.length === 0) {
       return [];
@@ -81,6 +81,7 @@ export class RagService {
   async generateAnswer(query: string): Promise<string> {
     // Retrieve relevant context
     const context = await this.retrieveRelevantContext(query);
+    // console.log('Retrieved context:', context);
 
     // Create prompt with context
     const prompt = `
@@ -96,3 +97,19 @@ Please provide a comprehensive answer based on the context information provided 
     return await this.ollamaService.generateResponse(prompt);
   }
 }
+
+/*
+Relationship with Other Parameters
+
+topP: Works alongside topK - selects tokens based on cumulative probability
+temperature: Controls randomness in selection among the topK candidates
+typical_p: An alternative to topK/topP that focuses on "typical" tokens
+
+Common Values
+
+topK = 40-50: Good balance for most applications
+topK = 1: Deterministic output (always same result)
+topK = 0 or very high: Essentially disables topK filtering
+
+The key is finding the right balance between creativity and coherence for your specific use case.
+*/
