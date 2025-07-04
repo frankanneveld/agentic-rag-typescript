@@ -1,0 +1,66 @@
+<div class="container">
+  <h1>Agentic RAG System</h1>
+  <div>
+    <img src="IMG_4866.jpeg" width="100%" />
+  </div>
+  <!-- File Upload Section -->
+  <div class="upload-section">
+    <h2>Upload Document</h2>
+    <input
+      type="file"
+      accept=".json"
+      (change)="onFileSelected($event)"
+      #fileInput
+    />
+    <button (click)="uploadFile()" [disabled]="!selectedFile() || uploading()">
+      {{ uploading() ? 'Uploading...' : 'Upload Document' }}
+    </button>
+
+    @if (uploadStatus()) {
+    <div class="status" [class.success]="uploadStatus()?.success">
+      {{ uploadStatus()?.message }}
+    </div>
+    }
+  </div>
+
+  <!-- Query Section -->
+  <div class="query-section">
+    <h2>Ask Questions</h2>
+    <div class="input-group">
+      <input
+        type="text"
+        [(ngModel)]="query"
+        placeholder="Enter your question here..."
+        (keyup.enter)="submitQuery()"
+      />
+      <button
+        (click)="submitQuery()"
+        [disabled]="!query.trim() || processing()"
+      >
+        {{ processing() ? 'Processing...' : 'Ask Question' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  @if (answer()) {
+  <div class="answer-section">
+    <h3>Answer:</h3>
+    <div class="answer">{{ answer() }}</div>
+  </div>
+  }
+
+  <!-- History Section -->
+  @if (queryHistory().length > 0) {
+  <div class="history-section">
+    <h3>Query History</h3>
+    @for (item of queryHistory(); track item.timestamp) {
+    <div class="history-item">
+      <div class="question">Q: {{ item.question }}</div>
+      <div class="answer">A: {{ item.answer }}</div>
+      <div class="timestamp">{{ item.timestamp | date:'medium' }}</div>
+    </div>
+    }
+  </div>
+  }
+</div>
