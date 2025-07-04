@@ -76,7 +76,7 @@ You can upload the <code>test-document.json</code> from the test-example folder 
 #### Example:
 <ul>
     <li>What is the salary of John Doe ?</li>
-    <li>What is are the skills of Jane Smith ?</li>
+    <li>What are the skills of Jane Smith ?</li>
     <li>What are the total salary costs ?</li>
 </ul>
 - 
