@@ -79,4 +79,5 @@ You can upload the <code>test-document.json</code> from the test-example folder 
     <li>What are the skills of Jane Smith ?</li>
     <li>What is the total amount of all salaries ?</li>
 </ul>
-- 
+
+###### <small>Created: Frank Anneveld juli 2025</small>
