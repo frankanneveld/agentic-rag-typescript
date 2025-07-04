@@ -68,3 +68,15 @@ ng serve
 ```bash
 ollama serve
 ```
+
+## Step 5: Test Example
+Open the browser <a href="http://localhost:4200">http://localhost:4200</a>
+You can upload the <code>test-document.json</code> from the test-example folder and ask questions about the document.
+
+#### Example:
+<ul>
+    <li>What is the salary of John Doe ?</li>
+    <li>What is are the skills of Jane Smith ?</li>
+    <li>What are the total salary costs ?</li>
+</ul>
+- 
