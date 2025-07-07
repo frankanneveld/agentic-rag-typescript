@@ -1,0 +1,261 @@
+// Variables
+$primary-color: #3b82f6;
+$success-color: #10b981;
+$error-color: #ef4444;
+$warning-color: #f59e0b;
+$background-color: #f8fafc;
+$text-color: #1f2937;
+$border-color: #e5e7eb;
+$shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+h1 {
+  text-align: center;
+  color: $primary-color;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+h2 {
+  color: $text-color;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h3 {
+  color: $text-color;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+// Section Styles
+.upload-section,
+.embedding-section,
+.embeddings-section,
+.query-section,
+.answer-section,
+.history-section,
+.error-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: $shadow;
+  border: 1px solid $border-color;
+}
+
+// Upload Controls
+.upload-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.processing-mode {
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: $text-color;
+    cursor: pointer;
+  }
+  
+  input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: $primary-color;
+  }
+}
+
+// Button Styles
+button {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($primary-color, 10%);
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.process-btn {
+  background-color: $success-color;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($success-color, 10%);
+  }
+}
+
+.export-btn {
+  background-color: $primary-color;
+}
+
+.clear-btn {
+  background-color: $warning-color;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($warning-color, 10%);
+  }
+}
+
+.dismiss-btn {
+  background-color: $error-color;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($error-color, 10%);
+  }
+}
+
+// Input Styles
+input[type="text"],
+input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid $border-color;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+}
+
+// Status Messages
+.status {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: 500;
+  
+  &.success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+  }
+  
+  &:not(.success) {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+  }
+}
+
+// Processing Indicator
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  
+  .spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid $border-color;
+    border-top: 3px solid $primary-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Progress Bar
+.progress-container {
+  margin-bottom: 1rem;
+  
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    
+    .percentage {
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 12px;
+    background-color: $border-color;
+    border-radius: 6px;
+    overflow: hidden;
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, $primary-color, lighten($primary-color, 15%));
+      transition: width 0.3s ease;
+      border-radius: 6px;
+    }
+  }
+  
+  .current-item {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-style: italic;
+  }
+}
+
+// Stats Container
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  
+  .stat {
+    background-color: $background-color;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    
+    .label {
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    
+    .value {
+      font-size: 1.5rem;
+    }
+  }
+}

@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { StreamingComponent } from "./streaming/streaming/streaming";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, StreamingComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -76,41 +77,6 @@ export class App {
     };
 
     reader.readAsText(file);
-
-    /*
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      console.log('FormData:', formData);
-
-      const response = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/upload`, formData)
-      );
-
-      console.log('Upload response:', response);
-
-      if (response.error) {
-        this.uploadStatus.set({
-          success: false,
-          message: response.error,
-        });
-      } else {
-        this.uploadStatus.set({
-          success: true,
-          message: 'File uploaded successfully!',
-        });
-      }
-    } catch (error) {
-      this.uploadStatus.set({
-        success: false,
-        message: 'Failed to upload document. Please try again.',
-      });
-    } finally {
-      this.uploading.set(false);
-    }
-
-    */
   }
 
   async submitQuery() {

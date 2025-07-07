@@ -1,0 +1,192 @@
+<div class="container">
+  <h1>Agentic RAG System with Streaming Embeddings</h1>
+  <div>
+    <img src="IMG_4866.jpeg" width="100%" />
+  </div>
+
+  <!-- File Upload Section -->
+  <div class="upload-section">
+    <h2>Upload Document</h2>
+    <input
+      type="file"
+      accept=".json"
+      (change)="onFileSelected($event)"
+      #fileInput
+    />
+    
+    <div class="upload-controls">
+      <button (click)="uploadFile()" [disabled]="!selectedFile() || uploading()">
+        {{ uploading() ? 'Uploading...' : 'Upload Document' }}
+      </button>
+
+      @if (selectedFile() && !uploading()) {
+        <div class="processing-mode">
+          <label>
+            <input 
+              type="checkbox" 
+              [checked]="useStreaming()" 
+              (change)="toggleProcessingMode()"
+            />
+            Use Streaming (Real-time progress)
+          </label>
+        </div>
+        
+        <button 
+          (click)="processEmbeddings()" 
+          [disabled]="isProcessingEmbeddings()"
+          class="process-btn"
+        >
+          {{ isProcessingEmbeddings() ? 'Processing Embeddings...' : 'Process Embeddings' }}
+        </button>
+      }
+    </div>
+
+    @if (uploadStatus()) {
+      <div class="status" [class.success]="uploadStatus()?.success">
+        {{ uploadStatus()?.message }}
+      </div>
+    }
+  </div>
+
+  <!-- Embedding Processing Section -->
+  @if (isProcessingEmbeddings() || streamingProgress() || processingStats()) {
+    <div class="embedding-section">
+      <h2>Embedding Processing</h2>
+      
+      @if (isProcessingEmbeddings()) {
+        <div class="processing-indicator">
+          <div class="spinner"></div>
+          <span>Processing embeddings...</span>
+        </div>
+      }
+
+      @if (streamingProgress()) {
+        <div class="progress-container">
+          <div class="progress-info">
+            <span>Progress: {{ streamingProgress()?.processed }} / {{ streamingProgress()?.total }}</span>
+            <span class="percentage">{{ progressPercentage }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div 
+              class="progress-fill" 
+              [style.width.%]="progressPercentage"
+            ></div>
+          </div>
+          @if (streamingProgress()?.currentItem) {
+            <div class="current-item">
+              Currently processing: {{ streamingProgress()?.currentItem }}
+            </div>
+          }
+        </div>
+      }
+
+      @if (processingStats()) {
+        <div class="stats-container">
+          <div class="stat">
+            <span class="label">Total Items:</span>
+            <span class="value">{{ processingStats()?.totalItems }}</span>
+          </div>
+          <div class="stat">
+            <span class="label">Processed:</span>
+            <span class="value">{{ embeddings().length }}</span>
+          </div>
+          @if (processingStats()?.duration) {
+            <div class="stat">
+              <span class="label">Duration:</span>
+              <span class="value">{{ processingDuration }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Embeddings Results Section -->
+  @if (embeddings().length > 0) {
+    <div class="embeddings-section">
+      <h2>Embeddings Results</h2>
+      <div class="embeddings-controls">
+        <button (click)="exportEmbeddings()" class="export-btn">
+          Export Embeddings ({{ embeddings().length }} items)
+        </button>
+        <button (click)="clearEmbeddings()" class="clear-btn">
+          Clear Results
+        </button>
+      </div>
+      
+      <div class="embeddings-preview">
+        <h3>Preview (First 5 items)</h3>
+        @for (embedding of embeddings().slice(0, 5); track embedding.originalIndex) {
+          <div class="embedding-item">
+            <div class="embedding-header">
+              <span class="index">Index: {{ embedding.originalIndex }}</span>
+              <span class="dimensions">Dimensions: {{ embedding.embedding.length }}</span>
+            </div>
+            <div class="embedding-text">{{ embedding.text }}</div>
+            <div class="embedding-vector">
+              Vector: [{{ formatEmbeddingVector(embedding.embedding) }}]
+            </div>
+          </div>
+        }
+        
+        @if (embeddings().length > 5) {
+          <div class="more-items">
+            ... and {{ embeddings().length - 5 }} more items
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Error Display -->
+  @if (processingError()) {
+    <div class="error-section">
+      <h3>Processing Error</h3>
+      <div class="error-message">{{ processingError() }}</div>
+      <button (click)="processingError.set(null)" class="dismiss-btn">
+        Dismiss
+      </button>
+    </div>
+  }
+
+  <!-- Query Section -->
+  <div class="query-section">
+    <h2>Ask Questions</h2>
+    <div class="input-group">
+      <input
+        type="text"
+        [(ngModel)]="query"
+        placeholder="Enter your question here..."
+        (keyup.enter)="submitQuery()"
+      />
+      <button
+        (click)="submitQuery()"
+        [disabled]="!query.trim() || processing()"
+      >
+        {{ processing() ? 'Processing...' : 'Ask Question' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  @if (answer()) {
+    <div class="answer-section">
+      <h3>Answer:</h3>
+      <div class="answer">{{ answer() }}</div>
+    </div>
+  }
+
+  <!-- History Section -->
+  @if (queryHistory().length > 0) {
+    <div class="history-section">
+      <h3>Query History</h3>
+      @for (item of queryHistory(); track item.timestamp) {
+        <div class="history-item">
+          <div class="question">Q: {{ item.question }}</div>
+          <div class="answer">A: {{ item.answer }}</div>
+          <div class="timestamp">{{ item.timestamp | date:'medium' }}</div>
+        </div>
+      }
+    </div>
+  }
+</div>

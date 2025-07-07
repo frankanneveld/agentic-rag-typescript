@@ -1,24 +1,26 @@
-{
-  "company": "Tech Corp",
-  "employees": [
-    {
-      "name": "John Doe",
-      "position": "Software Engineer",
-      "department": "Engineering",
-      "salary": 75000,
-      "skills": ["JavaScript", "Python", "React"]
-    },
-    {
-      "name": "Jane Smith",
-      "position": "Product Manager",
-      "department": "Product",
-      "salary": 85000,
-      "skills": ["Product Strategy", "Analytics", "Leadership"]
+[
+  {
+    "company": "Tech Corp",
+    "employees": [
+      {
+        "name": "John Doe",
+        "position": "Software Engineer",
+        "department": "Engineering",
+        "salary": 75000,
+        "skills": ["JavaScript", "Python", "React"]
+      },
+      {
+        "name": "Jane Smith",
+        "position": "Product Manager",
+        "department": "Product",
+        "salary": 85000,
+        "skills": ["Product Strategy", "Analytics", "Leadership"]
+      }
+    ],
+    "policies": {
+      "vacation_days": 20,
+      "remote_work": "hybrid",
+      "benefits": ["health insurance", "401k", "dental"]
     }
-  ],
-  "policies": {
-    "vacation_days": 20,
-    "remote_work": "hybrid",
-    "benefits": ["health insurance", "401k", "dental"]
   }
-}
+]

@@ -12,7 +12,7 @@ type DocumentChunk = {
 export class RagService {
   private documents: DocumentChunk[] = [];
 
-  constructor(private readonly ollamaService: OllamaService) {}
+  constructor(private readonly ollamaService: OllamaService) { }
 
   async ingestDocument(jsonData: any): Promise<void> {
     // Convert JSON data to text chunks
@@ -81,17 +81,22 @@ export class RagService {
   async generateAnswer(query: string): Promise<string> {
     // Retrieve relevant context
     const context = await this.retrieveRelevantContext(query);
-    // console.log('Retrieved context:', context);
+    console.log('Retrieved context:', context);
 
-    // Create prompt with context
-    const prompt = `
+    // Create prompt with context or just the query
+    const prompt =
+      context.length > 0
+        ? `
 Context information:
 ${context.join('\n\n')}
 
 Question: ${query}
 
 Please provide a comprehensive answer based on the context information provided above.
-`;
+`
+        : `Question: ${query}`;
+
+    console.log('Generated prompt:', prompt);
 
     // Generate answer using Ollama
     return await this.ollamaService.generateResponse(prompt);
