@@ -21,9 +21,7 @@ export class App {
   query = '';
   answer = signal<string>('');
   processing = signal(false);
-  queryHistory = signal<
-    Array<{ question: string; answer: string; timestamp: Date }>
-  >([]);
+  queryHistory = signal<Array<{ question: string; answer: string; timestamp: Date }>>([]);
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -56,9 +54,7 @@ export class App {
       const parsedData = JSON.parse(json as string);
       console.log('Parsed JSON:', parsedData);
 
-      const response = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/upload`, {query: parsedData})
-      );
+      const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/upload`, { query: parsedData }));
 
       if (response.error) {
         this.uploadStatus.set({
@@ -120,9 +116,7 @@ export class App {
     const currentQuery = this.query.trim();
 
     try {
-      const response = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/query`, { query: currentQuery })
-      );
+      const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/query`, { query: currentQuery }));
 
       this.answer.set(response.answer);
 

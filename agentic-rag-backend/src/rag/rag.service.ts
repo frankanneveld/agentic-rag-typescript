@@ -54,10 +54,7 @@ export class RagService {
     return dotProduct / (magnitudeA * magnitudeB);
   }
 
-  async retrieveRelevantContext(
-    query: string,
-    topK: number = 3,
-  ): Promise<string[]> {
+  async retrieveRelevantContext(query: string, topK: number = 3): Promise<string[]> {
     if (this.documents.length === 0) {
       return [];
     }
@@ -83,14 +80,17 @@ export class RagService {
     const context = await this.retrieveRelevantContext(query);
 
     // Create prompt with context
-    const prompt = `
+    const prompt =
+      context.length > 0
+        ? `
 Context information:
 ${context.join('\n\n')}
 
 Question: ${query}
 
 Please provide a comprehensive answer based on the context information provided above.
-`;
+`
+        : `Question: ${query}`;
 
     // Generate answer using Ollama
     return await this.ollamaService.generateResponse(prompt);

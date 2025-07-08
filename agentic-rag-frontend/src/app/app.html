@@ -6,20 +6,13 @@
   <!-- File Upload Section -->
   <div class="upload-section">
     <h2>Upload Document</h2>
-    <input
-      type="file"
-      accept=".json"
-      (change)="onFileSelected($event)"
-      #fileInput
-    />
+    <input type="file" accept=".json" (change)="onFileSelected($event)" #fileInput />
     <button (click)="uploadFile()" [disabled]="!selectedFile() || uploading()">
       {{ uploading() ? 'Uploading...' : 'Upload Document' }}
     </button>
 
     @if (uploadStatus()) {
-    <div class="status" [class.success]="uploadStatus()?.success">
-      {{ uploadStatus()?.message }}
-    </div>
+    <div class="status" [class.success]="uploadStatus()?.success">{{ uploadStatus()?.message }}</div>
     }
   </div>
 
@@ -27,16 +20,8 @@
   <div class="query-section">
     <h2>Ask Questions</h2>
     <div class="input-group">
-      <input
-        type="text"
-        [(ngModel)]="query"
-        placeholder="Enter your question here..."
-        (keyup.enter)="submitQuery()"
-      />
-      <button
-        (click)="submitQuery()"
-        [disabled]="!query.trim() || processing()"
-      >
+      <input type="text" [(ngModel)]="query" placeholder="Enter your question here..." (keyup.enter)="submitQuery()" />
+      <button (click)="submitQuery()" [disabled]="!query.trim() || processing()">
         {{ processing() ? 'Processing...' : 'Ask Question' }}
       </button>
     </div>

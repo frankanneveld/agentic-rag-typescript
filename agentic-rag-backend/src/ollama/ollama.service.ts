@@ -7,14 +7,11 @@ export class OllamaService {
 
   async generateResponse(prompt: string): Promise<string> {
     try {
-      const response: AxiosResponse<{ response: string }> = await axios.post(
-        `${this.ollamaUrl}/api/generate`,
-        {
-          model: 'llama3.2:3b',
-          prompt: prompt,
-          stream: false,
-        },
-      );
+      const response: AxiosResponse<{ response: string }> = await axios.post(`${this.ollamaUrl}/api/generate`, {
+        model: 'llama3.2:3b',
+        prompt: prompt,
+        stream: false,
+      });
       return response.data.response;
     } catch (error: unknown) {
       console.error('Error calling Ollama:', error);
@@ -24,13 +21,10 @@ export class OllamaService {
 
   async embedText(text: string): Promise<number[]> {
     try {
-      const response: AxiosResponse<{ embedding: number[] }> = await axios.post(
-        `${this.ollamaUrl}/api/embeddings`,
-        {
-          model: 'llama3.2:3b',
-          prompt: text,
-        },
-      );
+      const response: AxiosResponse<{ embedding: number[] }> = await axios.post(`${this.ollamaUrl}/api/embeddings`, {
+        model: 'llama3.2:3b',
+        prompt: text,
+      });
       return response.data.embedding;
     } catch (error: unknown) {
       console.error('Error generating embeddings:', error);
