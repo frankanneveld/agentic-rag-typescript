@@ -33,26 +33,47 @@ export class RagService {
   }
 
   /**
-   * Chunk the document into smaller chunks
+   * Chunk the document into semantically meaningful chunks (by sentences)
    * @param data - The document to chunk
    * @returns An array of chunks
    */
   private chunkDocument(data: any): DocumentChunk[] {
     const chunks: DocumentChunk[] = [];
-
-    // Simple chunking strategy - convert object to text
     const textContent = JSON.stringify(data, null, 2);
-    const chunkSize = 500;
+    const targetChunkSize = 500;
+    const overlapSentences = 1;
 
-    for (let i = 0; i < textContent.length; i += chunkSize) {
-      const chunk = textContent.slice(i, i + chunkSize);
+    // Split into sentences using a simple regex
+    const sentences = textContent.match(/[^.!?\n]+[.!?\n]+|[^.!?\n]+$/g) || [];
+
+    let currentChunk: string[] = [];
+    let currentLength = 0;
+    let chunkIndex = 0;
+    for (let i = 0; i < sentences.length; i++) {
+      const sentence = sentences[i];
+      if (currentLength + sentence.length > targetChunkSize && currentChunk.length > 0) {
+        // Create chunk
+        chunks.push({
+          id: `chunk_${chunkIndex}`,
+          content: currentChunk.join('').trim(),
+          metadata: { source: 'uploaded_document', chunk_index: chunkIndex },
+        });
+        chunkIndex++;
+        // Start new chunk with overlap
+        currentChunk = currentChunk.slice(-overlapSentences);
+        currentLength = currentChunk.reduce((sum, s) => sum + s.length, 0);
+      }
+      currentChunk.push(sentence);
+      currentLength += sentence.length;
+    }
+    // Add any remaining sentences as the last chunk
+    if (currentChunk.length > 0) {
       chunks.push({
-        id: `chunk_${i / chunkSize}`,
-        content: chunk,
-        metadata: { source: 'uploaded_document', chunk_index: i / chunkSize },
+        id: `chunk_${chunkIndex}`,
+        content: currentChunk.join('').trim(),
+        metadata: { source: 'uploaded_document', chunk_index: chunkIndex },
       });
     }
-
     return chunks;
   }
 
@@ -106,6 +127,8 @@ export class RagService {
   async generateAnswer(query: string): Promise<string> {
     // Retrieve relevant context
     const context = await this.retrieveRelevantContext(query);
+
+    console.log('Context:', context);
 
     // Create prompt with context
     const prompt =
