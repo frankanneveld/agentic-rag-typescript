@@ -60,7 +60,9 @@ export class RagService {
     }
 
     // Generate embedding for the query
-    const queryEmbedding = await this.ollamaService.embedText(query);
+    const queryEmbedding: number[] = await this.ollamaService.embedText(query);
+
+    console.log('Query embedding:', queryEmbedding);
 
     // Calculate similarities
     const similarities = this.documents.map((doc) => ({
@@ -89,6 +91,7 @@ ${context.join('\n\n')}
 Question: ${query}
 
 Please provide a comprehensive answer based on the context information provided above.
+Show the sources you have used to answer the question.
 `
         : `Question: ${query}`;
 
