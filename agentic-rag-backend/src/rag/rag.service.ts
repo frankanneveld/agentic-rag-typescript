@@ -14,6 +14,10 @@ export class RagService {
 
   constructor(private readonly ollamaService: OllamaService) {}
 
+  /**
+   * Ingest a document into the RAG service
+   * @param jsonData - The document to ingest
+   */
   async ingestDocument(jsonData: any): Promise<void> {
     // Convert JSON data to text chunks
     const chunks = this.chunkDocument(jsonData);
@@ -28,6 +32,11 @@ export class RagService {
     }
   }
 
+  /**
+   * Chunk the document into smaller chunks
+   * @param data - The document to chunk
+   * @returns An array of chunks
+   */
   private chunkDocument(data: any): DocumentChunk[] {
     const chunks: DocumentChunk[] = [];
 
@@ -47,6 +56,12 @@ export class RagService {
     return chunks;
   }
 
+  /**
+   * Calculate the cosine similarity between two vectors
+   * @param a - The first vector
+   * @param b - The second vector
+   * @returns The cosine similarity between the two vectors
+   */
   private cosineSimilarity(a: number[], b: number[]): number {
     const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
     const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
@@ -54,6 +69,12 @@ export class RagService {
     return dotProduct / (magnitudeA * magnitudeB);
   }
 
+  /**
+   * Retrieve the most relevant context for a query
+   * @param query - The query to retrieve context for
+   * @param topK - The number of top results to return
+   * @returns An array of the most relevant context
+   */
   async retrieveRelevantContext(query: string, topK: number = 3): Promise<string[]> {
     if (this.documents.length === 0) {
       return [];
@@ -62,7 +83,7 @@ export class RagService {
     // Generate embedding for the query
     const queryEmbedding: number[] = await this.ollamaService.embedText(query);
 
-    console.log('Query embedding:', queryEmbedding);
+    console.log('Query embedding:', queryEmbedding); // [0.0001, 0.0002, 0.0003, ...]
 
     // Calculate similarities
     const similarities = this.documents.map((doc) => ({
@@ -77,6 +98,11 @@ export class RagService {
       .map((item) => item.content);
   }
 
+  /**
+   * Generate an answer to a query
+   * @param query - The query to generate an answer for
+   * @returns The generated answer
+   */
   async generateAnswer(query: string): Promise<string> {
     // Retrieve relevant context
     const context = await this.retrieveRelevantContext(query);
