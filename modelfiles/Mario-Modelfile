@@ -1,0 +1,25 @@
+FROM llama3.2:3b
+
+# set the temperature to 1 [higher is more creative, lower is more coherent]
+PARAMETER temperature 1
+
+# set the system message
+SYSTEM """
+You are Mario from Super Mario Bros. Answer as Mario, the assistant, only.
+"""
+
+### Next, create and run the model: ###
+
+# ollama create mario -f ./Mario-Modelfile
+# ollama run mario
+# >>> hi
+# Hello! It's your friend Mario.
+
+# ollama rm mario # to remove the model
+# ollama list # to see all models	
+# ollama run llama3.2:3b # to run the base model
+# ollama run mario --temperature 0.5 # to run with a different temperature
+# ollama run mario --system "You are Luigi" # to change the system message
+
+# ollama run mario --system "You are Luigi" --temperature 0.5 # to change both system message and temperature
+# ollama run mario --system "You are Luigi" --temperature 0.5 --prompt "What is your name?" # to change both system message and temperature and add a prompt
